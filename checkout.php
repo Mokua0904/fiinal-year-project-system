@@ -250,7 +250,7 @@ foreach ($_SESSION['cart'] as $key => $item) {
                 formData.append('total', totalAmount);
 
                 // FIXED: Pointing to the actions/ folder
-                fetch('actions/orders_action.php', { method: 'POST', body: formData })
+                fetch('actions/order_action.php', { method: 'POST', body: formData })
                 .then(res => res.json())
                 .then(orderData => {
                     
