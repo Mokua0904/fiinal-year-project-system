@@ -272,6 +272,12 @@ require_once '../includes/sidebar.php';
     function processCheckout() {
         if (cart.length === 0) return alert("Cart is empty!");
         
+        // THE FIX: If this is an online order, skip payment modals entirely
+        if (typeof onlineOrderId !== 'undefined' && onlineOrderId > 0) {
+            completeSale('Online Pickup'); 
+            return; 
+        }
+
         saleTotal = parseFloat(document.getElementById('cart-total').innerText.replace(/[^0-9.-]+/g,""));
 
         if (currentPaymentMethod === 'Cash') {
@@ -360,7 +366,7 @@ require_once '../includes/sidebar.php';
         document.getElementById('stk-btn').disabled = false;
     }
 
-    // --- COMPLETE SALE (POINTING TO YOUR MARK COLLECTED SCRIPT) ---
+    // --- COMPLETE SALE FUNCTION ---
     function completeSale(method) {
         const btn = document.getElementById('checkout-btn');
         btn.disabled = true;
@@ -379,19 +385,21 @@ require_once '../includes/sidebar.php';
         .then(data => {
             if (data.success) {
                 
-                // If it's an online order, mark it as collected using your specific file
+                // If this was an online order, mark it as collected
                 if (typeof onlineOrderId !== 'undefined' && onlineOrderId > 0) {
                     
-                    fetch('../actions/mark_order_collected.php', { // CHANGED TO YOUR FILE
+                    fetch('../actions/mark_order_collected.php', { 
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ order_id: onlineOrderId })
                     })
                     .then(() => {
+                        // Redirect straight to the receipt
                         window.location.href = `pos_receipt.php?receipt=${data.receipt_no}`;
                     });
                     
                 } else {
+                    // Normal POS sale redirect
                     window.location.href = `pos_receipt.php?receipt=${data.receipt_no}`;
                 }
                 
@@ -426,7 +434,7 @@ require_once '../includes/sidebar.php';
             }
         });
         updateCartUI();
-        alert("Online order loaded into POS. Please select payment method.");
+        alert("Online order loaded into POS. Please click Complete Sale.");
     } else {
         updateCartUI();
     }
