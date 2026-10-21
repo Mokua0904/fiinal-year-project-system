@@ -1,8 +1,18 @@
 <?php
+// eckose_pos/mpesa_api.php
+
 // Turn on ALL errors so we can see what is breaking
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Load environment variables from .env file manually
+$env = parse_ini_file(__DIR__ . '/.env');
+
+// Set credentials with fallbacks (safe for GitHub)
+$consumerKey = $env['MPESA_CONSUMER_KEY'] ?? 'YOUR_CONSUMER_KEY_HERE';
+$consumerSecret = $env['MPESA_CONSUMER_SECRET'] ?? 'YOUR_CONSUMER_SECRET_HERE';
+$passkey = $env['MPESA_PASSKEY'] ?? 'YOUR_PASSKEY_HERE';
 
 // Force the output to be JSON
 header('Content-Type: application/json');
@@ -13,7 +23,7 @@ if (!function_exists('curl_init')) {
     exit;
 }
 
-// 2. Get the data from JavaScript
+// 2. Get the data from JavaScript (FIXED: Removed the extra $ sign)
 $input = json_decode(file_get_contents('php://input'), true);
 $phone = $input['phone'] ?? '';
 
@@ -22,10 +32,7 @@ if (empty($phone)) {
     exit;
 }
 
-// 3. Safaricom Sandbox Credentials
-$consumerKey = 'q7rtOusU2JygzvNaLbA3DmvtzDCPaFcfXKvnEdhj1GIOsrAg'; 
-$consumerSecret = 'GLoRtye9Ac8yfrUJYWRhvxAHbwkdpkD9QW7IOzQZvrTJySYLXmSi6ZiCWIcK6qt9';
-$passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'; 
+// 3. Safaricom Sandbox Settings
 $shortcode = '174379'; 
 
 // Format phone (0700... -> 254700...)
@@ -59,7 +66,7 @@ $response = json_decode($result);
 if (!isset($response->access_token)) {
     echo json_encode([
         'success' => false, 
-        'message' => 'Safaricom rejected credentials. Did you put your real keys in?',
+        'message' => 'Safaricom rejected credentials. Did you put your real keys in the .env file?',
         'safaricom_response' => $response
     ]);
     exit;
