@@ -1,0 +1,28 @@
+# eckose_pos/.htaccess
+
+# 1. Disable Directory Browsing
+# If a folder doesn't have an index.php file, Apache will normally list all files inside it. This stops that.
+Options -Indexes
+
+# 2. Turn on the Rewrite Engine
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 3. Block Direct Access to Sensitive Folders
+    # This prevents anyone from accessing your config or includes folders via the URL bar.
+    # We leave 'actions' accessible because our AJAX calls and forms need to post to them.
+    RewriteRule ^(config|includes)/ - [F,L]
+</IfModule>
+
+# 4. Protect specific file extensions
+# Prevents anyone from downloading your database backups, log files, or hidden files.
+<FilesMatch "\.(sql|log|ini|bak|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 5. Prevent viewing of the .htaccess file itself
+<Files ".htaccess">
+    Order allow,deny
+    Deny from all
+</Files>
