@@ -5,11 +5,11 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-A comprehensive, web-based Point of Sale (POS) and E-commerce management system designed specifically for **Eckose Techs**, a multi-branch electronics retailer in Kenya. 
+A comprehensive, web-based Point of Sale (POS) and E-commerce management system designed specifically for **Eckose Techs**, a multi-branch electronics retailer. 
 
 This project was developed to transition the business from manual, paper-based operations to a fully digitized, automated platform.
 
-## 👨‍💻 Developer Information
+👨‍💻 Developer Information
 *   **Name:** Job Mokua
 *   **Registration Number:** BIT/2021/93882
 *   **Course:** Bachelor of Science in Information Technology
